@@ -290,3 +290,15 @@ class RazerKrakenKittyEdition(__RazerDeviceBrightnessSuspend):
     MATRIX_DIMS = [1, 4]
 
     DEVICE_IMAGE = "https://assets2.razerzone.com/images/pnx.assets/1c503aa176bc82d999299aba0d6c7d2c/kraken-kitty-quartz.png"
+
+class RazerNariUltimate(__RazerDeviceBrightnessSuspend):
+    """
+    Class for the Razer Nari Ultimate
+    """
+    EVENT_FILE_REGEX = re.compile(r'.*Razer_Razer_Nari_Ultimate-event-if05')
+    
+    USB_VID = 0x1532
+    USB_PID = 0x051A
+    METHODS = ['get_device_type_headset', 'set_none_effect', 'set_static_effect', 'set_brightness', 'get_brightness']
+    
+    DEVICE_IMAGE = "https://www.xtremehardware.com/images/stories/Razer/news/Nari_Ultimate-1.png"
