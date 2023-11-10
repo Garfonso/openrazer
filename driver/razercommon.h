@@ -9,7 +9,7 @@
 
 #include <linux/usb/input.h>
 
-#define DRIVER_VERSION "3.5.0"
+#define DRIVER_VERSION "3.7.0"
 #define DRIVER_LICENSE "GPL v2"
 #define DRIVER_AUTHOR "Terry Cain <terry@terrys-home.co.uk>"
 
@@ -30,7 +30,6 @@ do { \
         goto exit_free; \
     } \
 } while (0)
-
 
 #define USB_VENDOR_ID_RAZER 0x1532
 
@@ -69,10 +68,23 @@ do { \
 #define FULLY_CHARGED_LED 0x22
 
 // LED Effect definitions
-#define LED_STATIC           0x00
-#define LED_BLINKING         0x01
-#define LED_PULSATING        0x02
-#define LED_SPECTRUM_CYCLING 0x04
+enum razer_classic_effect_id {
+    CLASSIC_EFFECT_STATIC = 0x00,
+    CLASSIC_EFFECT_BLINKING = 0x01,
+    CLASSIC_EFFECT_BREATHING = 0x02, // also called pulsating
+    CLASSIC_EFFECT_SPECTRUM = 0x04,
+};
+
+enum razer_matrix_effect_id {
+    MATRIX_EFFECT_OFF = 0x00,
+    MATRIX_EFFECT_WAVE = 0x01,
+    MATRIX_EFFECT_REACTIVE = 0x02, // afterglow
+    MATRIX_EFFECT_BREATHING = 0x03,
+    MATRIX_EFFECT_SPECTRUM = 0x04,
+    MATRIX_EFFECT_CUSTOMFRAME = 0x05,
+    MATRIX_EFFECT_STATIC = 0x06,
+    MATRIX_EFFECT_STARLIGHT = 0x19
+};
 
 // Report Responses
 #define RAZER_CMD_BUSY          0x01

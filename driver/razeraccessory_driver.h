@@ -18,13 +18,16 @@
 #define USB_DEVICE_ID_RAZER_CHROMA_MUG 0x0F07
 #define USB_DEVICE_ID_RAZER_CHROMA_BASE 0x0F08
 #define USB_DEVICE_ID_RAZER_CHROMA_HDK 0x0F09
+#define USB_DEVICE_ID_RAZER_LAPTOP_STAND_CHROMA 0x0F0D
 #define USB_DEVICE_ID_RAZER_RAPTOR_27 0x0F12
 #define USB_DEVICE_ID_RAZER_KRAKEN_KITTY_EDITION 0x0F19
+#define USB_DEVICE_ID_RAZER_CORE_X_CHROMA 0x0F1A
 #define USB_DEVICE_ID_RAZER_MOUSE_BUNGEE_V3_CHROMA 0x0F1D
 #define USB_DEVICE_ID_RAZER_CHROMA_ADDRESSABLE_RGB_CONTROLLER 0x0F1F
 #define USB_DEVICE_ID_RAZER_BASE_STATION_V2_CHROMA 0x0F20
 #define USB_DEVICE_ID_RAZER_THUNDERBOLT_4_DOCK_CHROMA 0x0F21
 #define USB_DEVICE_ID_RAZER_CHARGING_PAD_CHROMA 0x0F26
+#define USB_DEVICE_ID_RAZER_LAPTOP_STAND_CHROMA_V2 0x0F2B
 #define USB_DEVICE_ID_RAZER_NARI_ULTIMATE 0x051A
 
 #define RAZER_ACCESSORY_WAIT_MIN_US 600
@@ -45,8 +48,6 @@ struct razer_accessory_device {
     unsigned char saved_brightness;
 
     char serial[23];
-    // 3 Bytes, first byte is whether fw version is collected, 2nd byte is major version, 3rd is minor, should be printed out in hex form as are bcd
-    unsigned char firmware_version[3];
 };
 
 /*

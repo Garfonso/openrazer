@@ -2,7 +2,7 @@
 
 import numpy as _np
 import dbus as _dbus
-#from openrazer.client.constants import WAVE_LEFT, WAVE_RIGHT, REACTIVE_500MS, REACTIVE_1000MS, REACTIVE_1500MS, REACTIVE_2000MS
+# from openrazer.client.constants import WAVE_LEFT, WAVE_RIGHT, REACTIVE_500MS, REACTIVE_1000MS, REACTIVE_1500MS, REACTIVE_2000MS
 from openrazer.client import constants as c
 
 # TODO logging.debug if value out of range v1.1
@@ -153,6 +153,27 @@ class RazerFX(BaseRazerFX):
 
         if self.has('wave'):
             self._lighting_dbus.setWave(direction)
+
+            return True
+        return False
+
+    def wheel(self, direction: int) -> bool:
+        """
+        Wheel effect
+
+        :param direction: Wheel direction either WHEEL_RIGHT or WHEEL_LEFT
+        :type direction: int
+
+        :return: True if success, False otherwise
+        :rtype: bool
+
+        :raises ValueError: If direction is invalid
+        """
+        if direction not in (c.WHEEL_LEFT, c.WHEEL_RIGHT):
+            raise ValueError("Direction must be WHEEL_RIGHT (0x01) or WHEEL_LEFT (0x02)")
+
+        if self.has('wheel'):
+            self._lighting_dbus.setWheel(direction)
 
             return True
         return False
@@ -822,6 +843,13 @@ class SingleLed(BaseRazerFX):
             return True
         return False
 
+    def on(self) -> bool:
+        if self._shas('on'):
+            self._getattr('set#On')()
+
+            return True
+        return False
+
     def spectrum(self) -> bool:
         if self._shas('spectrum'):
             self._getattr('set#Spectrum')()
@@ -970,6 +998,22 @@ class SingleLed(BaseRazerFX):
 
         if self._shas('breath_random'):
             self._getattr('set#BreathRandom')()
+
+            return True
+        return False
+
+    def breath_mono(self) -> bool:
+        """
+        Breath effect - mono colour
+
+        :return: True if success, False otherwise
+        :rtype: bool
+
+        :raises ValueError: If parameters are invalid
+        """
+
+        if self._shas('breath_mono'):
+            self._getattr('set#BreathMono')()
 
             return True
         return False

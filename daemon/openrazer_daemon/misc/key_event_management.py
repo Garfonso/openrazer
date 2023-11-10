@@ -356,8 +356,8 @@ class KeyboardKeyManager(object):
 
         if key_press == 'autorepeat':  # TODO not done right yet
             # If its brightness then convert autorepeat to key presses
-            # 190 (KEY_F20) and 194 (KEY_F24) are defined in razerkbd_driver.c
-            if key_id in (190, 194):
+            # Brightness keys are defined in keyboard.py and razerkbd_driver.c
+            if key_id in (0x2ab, 0x2aa):
                 key_press = 'press'
             else:
                 # Quit out early
@@ -423,6 +423,7 @@ class KeyboardKeyManager(object):
                                 # Clear macro
                                 self.dbus_delete_macro(self._current_macro_bind_key)
                         self._recording_macro = False
+                        self._parent.setMacroEffect(0x00)
                         self._parent.setMacroMode(False)
                 # Sets up game mode as when enabling macro keys it stops the key working
                 elif key_name == 'GAMEMODE':
@@ -444,7 +445,7 @@ class KeyboardKeyManager(object):
                             current_brightness = 0
 
                         self._parent.setBrightness(current_brightness)
-                        #self._parent.method_args['brightness'] = current_brightness
+                        # self._parent.method_args['brightness'] = current_brightness
                 elif key_name == 'BRIGHTNESSUP':
                     # Get brightness value
                     current_brightness = self._parent.method_args.get('brightness', None)
@@ -457,7 +458,7 @@ class KeyboardKeyManager(object):
                             current_brightness = 100
 
                         self._parent.setBrightness(current_brightness)
-                        #self._parent.method_args['brightness'] = current_brightness
+                        # self._parent.method_args['brightness'] = current_brightness
 
                 elif self._recording_macro:
 
@@ -613,7 +614,7 @@ class KeyboardKeyManager(object):
             # Device is the device the msg originated from (could be parent device)
             if msg[2] != 'setRipple':
                 # If we are not doing ripple effect then disable the storing of keys
-                #self.temp_key_store_state = False
+                # self.temp_key_store_state = False
                 pass
 
 
@@ -688,9 +689,9 @@ class GamepadKeyManager(KeyboardKeyManager):
 
             # if self._testing:
             # if key_press:
-                #self._logger.debug("Got Key: {0} Down".format(key_name))
+                # self._logger.debug("Got Key: {0} Down".format(key_name))
             # else:
-                #self._logger.debug("Got Key: {0} Up".format(key_name))
+                # self._logger.debug("Got Key: {0} Up".format(key_name))
 
             # Logic for mode switch modifier
             if self._mode_modifier:

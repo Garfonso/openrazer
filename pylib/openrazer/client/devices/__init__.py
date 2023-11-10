@@ -85,6 +85,7 @@ class RazerDevice(object):
             'lighting_breath_triple': self._has_feature('razer.device.lighting.chroma', 'setBreathTriple'),
             'lighting_breath_random': self._has_feature('razer.device.lighting.chroma', 'setBreathRandom'),
             'lighting_wave': self._has_feature('razer.device.lighting.chroma', 'setWave'),
+            'lighting_wheel': self._has_feature('razer.device.lighting.chroma', 'setWheel'),
             'lighting_reactive': self._has_feature('razer.device.lighting.chroma', 'setReactive'),
             'lighting_none': self._has_feature('razer.device.lighting.chroma', 'setNone'),
             'lighting_spectrum': self._has_feature('razer.device.lighting.chroma', 'setSpectrum'),
@@ -113,11 +114,13 @@ class RazerDevice(object):
             'lighting_logo_spectrum': self._has_feature('razer.device.lighting.logo', 'setLogoSpectrum'),
             'lighting_logo_static': self._has_feature('razer.device.lighting.logo', 'setLogoStatic'),
             'lighting_logo_none': self._has_feature('razer.device.lighting.logo', 'setLogoNone'),
+            'lighting_logo_on': self._has_feature('razer.device.lighting.logo', 'setLogoOn'),
             'lighting_logo_reactive': self._has_feature('razer.device.lighting.logo', 'setLogoReactive'),
             'lighting_logo_wave': self._has_feature('razer.device.lighting.logo', 'setLogoWave'),
             'lighting_logo_breath_single': self._has_feature('razer.device.lighting.logo', 'setLogoBreathSingle'),
             'lighting_logo_breath_dual': self._has_feature('razer.device.lighting.logo', 'setLogoBreathDual'),
             'lighting_logo_breath_random': self._has_feature('razer.device.lighting.logo', 'setLogoBreathRandom'),
+            'lighting_logo_breath_mono': self._has_feature('razer.device.lighting.logo', 'setLogoBreathMono'),
 
             'lighting_scroll': self._has_feature('razer.device.lighting.scroll'),
             'lighting_scroll_active': self._has_feature('razer.device.lighting.scroll', 'setScrollActive'),
@@ -127,11 +130,13 @@ class RazerDevice(object):
             'lighting_scroll_spectrum': self._has_feature('razer.device.lighting.scroll', 'setScrollSpectrum'),
             'lighting_scroll_static': self._has_feature('razer.device.lighting.scroll', 'setScrollStatic'),
             'lighting_scroll_none': self._has_feature('razer.device.lighting.scroll', 'setScrollNone'),
+            'lighting_scroll_on': self._has_feature('razer.device.lighting.scroll', 'setScrollOn'),
             'lighting_scroll_reactive': self._has_feature('razer.device.lighting.scroll', 'setScrollReactive'),
             'lighting_scroll_wave': self._has_feature('razer.device.lighting.scroll', 'setScrollWave'),
             'lighting_scroll_breath_single': self._has_feature('razer.device.lighting.scroll', 'setScrollBreathSingle'),
             'lighting_scroll_breath_dual': self._has_feature('razer.device.lighting.scroll', 'setScrollBreathDual'),
             'lighting_scroll_breath_random': self._has_feature('razer.device.lighting.scroll', 'setScrollBreathRandom'),
+            'lighting_scroll_breath_mono': self._has_feature('razer.device.lighting.scroll', 'setScrollBreathMono'),
 
             'lighting_left': self._has_feature('razer.device.lighting.left'),
             'lighting_left_active': self._has_feature('razer.device.lighting.left', 'setLeftActive'),
@@ -144,6 +149,7 @@ class RazerDevice(object):
             'lighting_left_breath_single': self._has_feature('razer.device.lighting.left', 'setLeftBreathSingle'),
             'lighting_left_breath_dual': self._has_feature('razer.device.lighting.left', 'setLeftBreathDual'),
             'lighting_left_breath_random': self._has_feature('razer.device.lighting.left', 'setLeftBreathRandom'),
+            'lighting_left_breath_mono': self._has_feature('razer.device.lighting.left', 'setLeftBreathMono'),
 
             'lighting_right': self._has_feature('razer.device.lighting.right'),
             'lighting_right_active': self._has_feature('razer.device.lighting.right', 'setRightActive'),
@@ -156,9 +162,21 @@ class RazerDevice(object):
             'lighting_right_breath_single': self._has_feature('razer.device.lighting.right', 'setRightBreathSingle'),
             'lighting_right_breath_dual': self._has_feature('razer.device.lighting.right', 'setRightBreathDual'),
             'lighting_right_breath_random': self._has_feature('razer.device.lighting.right', 'setRightBreathRandom'),
+            'lighting_right_breath_mono': self._has_feature('razer.device.lighting.right', 'setRightBreathMono'),
 
             'lighting_backlight': self._has_feature('razer.device.lighting.backlight'),
             'lighting_backlight_active': self._has_feature('razer.device.lighting.backlight', 'setBacklightActive'),
+            'lighting_backlight_brightness': self._has_feature('razer.device.lighting.backlight', 'setBacklightBrightness'),
+            'lighting_backlight_spectrum': self._has_feature('razer.device.lighting.backlight', 'setBacklightSpectrum'),
+            'lighting_backlight_static': self._has_feature('razer.device.lighting.backlight', 'setBacklightStatic'),
+            'lighting_backlight_none': self._has_feature('razer.device.lighting.backlight', 'setBacklightNone'),
+            'lighting_backlight_on': self._has_feature('razer.device.lighting.backlight', 'setBacklightOn'),
+            'lighting_backlight_reactive': self._has_feature('razer.device.lighting.backlight', 'setBacklightReactive'),
+            'lighting_backlight_wave': self._has_feature('razer.device.lighting.backlight', 'setBacklightWave'),
+            'lighting_backlight_breath_single': self._has_feature('razer.device.lighting.backlight', 'setBacklightBreathSingle'),
+            'lighting_backlight_breath_dual': self._has_feature('razer.device.lighting.backlight', 'setBacklightBreathDual'),
+            'lighting_backlight_breath_random': self._has_feature('razer.device.lighting.backlight', 'setBacklightBreathRandom'),
+            'lighting_backlight_breath_mono': self._has_feature('razer.device.lighting.backlight', 'setBacklightBreathMono'),
 
             'lighting_profile_led_red': self._has_feature('razer.device.lighting.profile_led', 'setRedLED'),
             'lighting_profile_led_green': self._has_feature('razer.device.lighting.profile_led', 'setGreenLED'),
@@ -175,6 +193,7 @@ class RazerDevice(object):
             'lighting_charging_breath_single': self._has_feature('razer.device.lighting.charging', 'setChargingBreathSingle'),
             'lighting_charging_breath_dual': self._has_feature('razer.device.lighting.charging', 'setChargingBreathDual'),
             'lighting_charging_breath_random': self._has_feature('razer.device.lighting.charging', 'setChargingBreathRandom'),
+            'lighting_charging_breath_mono': self._has_feature('razer.device.lighting.charging', 'setChargingBreathMono'),
 
             'lighting_fast_charging': self._has_feature('razer.device.lighting.fast_charging'),
             'lighting_fast_charging_active': self._has_feature('razer.device.lighting.fast_charging', 'setFastChargingActive'),
@@ -186,6 +205,7 @@ class RazerDevice(object):
             'lighting_fast_charging_breath_single': self._has_feature('razer.device.lighting.fast_charging', 'setFastChargingBreathSingle'),
             'lighting_fast_charging_breath_dual': self._has_feature('razer.device.lighting.fast_charging', 'setFastChargingBreathDual'),
             'lighting_fast_charging_breath_random': self._has_feature('razer.device.lighting.fast_charging', 'setFastChargingBreathRandom'),
+            'lighting_fast_charging_breath_mono': self._has_feature('razer.device.lighting.fast_charging', 'setFastChargingBreathMono'),
 
             'lighting_fully_charged': self._has_feature('razer.device.lighting.fully_charged'),
             'lighting_fully_charged_active': self._has_feature('razer.device.lighting.fully_charged', 'setFullyChargedActive'),
@@ -197,10 +217,14 @@ class RazerDevice(object):
             'lighting_fully_charged_breath_single': self._has_feature('razer.device.lighting.fully_charged', 'setFullyChargedBreathSingle'),
             'lighting_fully_charged_breath_dual': self._has_feature('razer.device.lighting.fully_charged', 'setFullyChargedBreathDual'),
             'lighting_fully_charged_breath_random': self._has_feature('razer.device.lighting.fully_charged', 'setFullyChargedBreathRandom'),
+            'lighting_fully_charged_breath_mono': self._has_feature('razer.device.lighting.fully_charged', 'setFullyChargedBreathMono'),
         }
 
         # Nasty hack to convert dbus.Int32 into native
-        self._matrix_dimensions = tuple([int(dim) for dim in self._dbus_interfaces['device'].getMatrixDimensions()])
+        if self.has('lighting_led_matrix'):
+            self._matrix_dimensions = tuple([int(dim) for dim in self._dbus_interfaces['device'].getMatrixDimensions()])
+        else:
+            self._matrix_dimensions = None
 
         if self.has('keyboard_layout'):
             self._kbd_layout = str(self._dbus_interfaces['device'].getKeyboardLayout())
@@ -518,8 +542,6 @@ class RazerDevice(object):
         if self.has('poll_rate'):
             if not isinstance(poll_rate, int):
                 raise ValueError("Poll rate is not an integer: {0}".format(poll_rate))
-            if poll_rate not in (_c.POLL_125HZ, _c.POLL_250HZ, _c.POLL_500HZ, _c.POLL_1000HZ, _c.POLL_2000HZ, _c.POLL_4000HZ, _c.POLL_8000HZ):
-                raise ValueError('Poll rate "{0}" is not one of {1}'.format(poll_rate, (_c.POLL_125HZ, _c.POLL_250HZ, _c.POLL_500HZ, _c.POLL_1000HZ, _c.POLL_2000HZ, _c.POLL_4000HZ, _c.POLL_8000HZ)))
 
             self._dbus_interfaces['device'].setPollRate(poll_rate)
 

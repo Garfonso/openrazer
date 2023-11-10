@@ -14,6 +14,10 @@
     </p>
   </description>
   <url type="homepage">https://openrazer.github.io/</url>
+  <custom>
+    <value key="KDE::matrix">#openrazer:matrix.org</value>
+    <value key="KDE::mastodon">https://fosstodon.org/@openrazer</value>
+  </custom>
   <provides>
     <modalias>usb:v1532p0013d*</modalias>
     <modalias>usb:v1532p0016d*</modalias>
@@ -88,16 +92,28 @@
     <modalias>usb:v1532p0096d*</modalias>
     <modalias>usb:v1532p0098d*</modalias>
     <modalias>usb:v1532p0099d*</modalias>
+    <modalias>usb:v1532p009Ad*</modalias>
     <modalias>usb:v1532p009Cd*</modalias>
+    <modalias>usb:v1532p009Ed*</modalias>
+    <modalias>usb:v1532p009Fd*</modalias>
+    <modalias>usb:v1532p00A1d*</modalias>
     <modalias>usb:v1532p00A5d*</modalias>
     <modalias>usb:v1532p00A6d*</modalias>
+    <modalias>usb:v1532p00AAd*</modalias>
+    <modalias>usb:v1532p00ABd*</modalias>
+    <modalias>usb:v1532p00B0d*</modalias>
+    <modalias>usb:v1532p00B2d*</modalias>
+    <modalias>usb:v1532p00B3d*</modalias>
+    <modalias>usb:v1532p00B4d*</modalias>
     <modalias>usb:v1532p00B6d*</modalias>
     <modalias>usb:v1532p00B7d*</modalias>
+    <modalias>usb:v1532p00B8d*</modalias>
     <modalias>usb:v1532p010Dd*</modalias>
     <modalias>usb:v1532p010Ed*</modalias>
     <modalias>usb:v1532p010Fd*</modalias>
     <modalias>usb:v1532p0111d*</modalias>
     <modalias>usb:v1532p0113d*</modalias>
+    <modalias>usb:v1532p0118d*</modalias>
     <modalias>usb:v1532p011Ad*</modalias>
     <modalias>usb:v1532p011Bd*</modalias>
     <modalias>usb:v1532p011Cd*</modalias>
@@ -171,10 +187,22 @@
     <modalias>usb:v1532p0271d*</modalias>
     <modalias>usb:v1532p0276d*</modalias>
     <modalias>usb:v1532p0279d*</modalias>
+    <modalias>usb:v1532p027Ad*</modalias>
     <modalias>usb:v1532p0282d*</modalias>
     <modalias>usb:v1532p028Ad*</modalias>
     <modalias>usb:v1532p028Bd*</modalias>
+    <modalias>usb:v1532p028Cd*</modalias>
+    <modalias>usb:v1532p028Dd*</modalias>
+    <modalias>usb:v1532p0290d*</modalias>
+    <modalias>usb:v1532p0292d*</modalias>
+    <modalias>usb:v1532p0294d*</modalias>
     <modalias>usb:v1532p0295d*</modalias>
+    <modalias>usb:v1532p0296d*</modalias>
+    <modalias>usb:v1532p0298d*</modalias>
+    <modalias>usb:v1532p029Ed*</modalias>
+    <modalias>usb:v1532p029Fd*</modalias>
+    <modalias>usb:v1532p02A0d*</modalias>
+    <modalias>usb:v1532p02A2d*</modalias>
     <modalias>usb:v1532p0501d*</modalias>
     <modalias>usb:v1532p0504d*</modalias>
     <modalias>usb:v1532p0506d*</modalias>
@@ -191,12 +219,15 @@
     <modalias>usb:v1532p0F07d*</modalias>
     <modalias>usb:v1532p0F08d*</modalias>
     <modalias>usb:v1532p0F09d*</modalias>
+    <modalias>usb:v1532p0F0Dd*</modalias>
     <modalias>usb:v1532p0F12d*</modalias>
     <modalias>usb:v1532p0F19d*</modalias>
+    <modalias>usb:v1532p0F1Ad*</modalias>
     <modalias>usb:v1532p0F1Dd*</modalias>
     <modalias>usb:v1532p0F1Fd*</modalias>
     <modalias>usb:v1532p0F20d*</modalias>
     <modalias>usb:v1532p0F21d*</modalias>
     <modalias>usb:v1532p0F26d*</modalias>
+    <modalias>usb:v1532p0F2Bd*</modalias>
   </provides>
 </component>
