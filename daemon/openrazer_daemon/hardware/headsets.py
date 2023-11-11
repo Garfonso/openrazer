@@ -178,7 +178,7 @@ class RazerKrakenKittyEdition(__RazerDeviceBrightnessSuspend):
 
     DEVICE_IMAGE = "https://assets2.razerzone.com/images/pnx.assets/1c503aa176bc82d999299aba0d6c7d2c/kraken-kitty-quartz.png"
 
-class RazerNariUltimate(__RazerDeviceBrightnessSuspend):
+class RazerNariUltimate(__RazerDevice):
     """
     Class for the Razer Nari Ultimate
     """
@@ -186,6 +186,18 @@ class RazerNariUltimate(__RazerDeviceBrightnessSuspend):
     
     USB_VID = 0x1532
     USB_PID = 0x051A
-    METHODS = ['get_device_type_headset', 'set_none_effect', 'set_static_effect', 'set_brightness', 'get_brightness']
+    METHODS = ['get_device_type_headset', 'set_none_effect', 'set_static_effect', 'set_brightness']
     
     DEVICE_IMAGE = "https://www.xtremehardware.com/images/stories/Razer/news/Nari_Ultimate-1.png"
+
+    @staticmethod
+    def decode_bitfield(bitfield):
+        print("bitfield: %s", bitfield);
+        return {
+            'state': (bitfield & 0x01) == 0x01,
+            'breathing1': (bitfield & 0x02) == 0x02,
+            'spectrum': (bitfield & 0x04) == 0x04,
+            'sync': (bitfield & 0x08) == 0x08,
+            'breathing2': (bitfield & 0x10) == 0x10,
+            'breathing3': (bitfield & 0x20) == 0x20,
+        }
