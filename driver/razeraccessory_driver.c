@@ -2276,6 +2276,10 @@ static int razer_accessory_probe(struct hid_device *hdev, const struct hid_devic
         // Needs to be in "Normal" mode for idle effects to function properly
         case USB_DEVICE_ID_RAZER_CHARGING_PAD_CHROMA:
             break;
+        case USB_DEVICE_ID_RAZER_NARI_ULTIMATE:
+            printk(KERN_WARNING "razeraccessory: setting mode to 0x03 and 0xff for NARI\n");
+            razer_set_device_mode(dev, 0x03, 0xff);
+            break;
 
         default:
             // Needs to be in "Driver" mode just to function
@@ -2490,6 +2494,37 @@ static void razer_accessory_disconnect(struct hid_device *hdev)
 
     kfree(dev);
     dev_info(&intf->dev, "Razer Device disconnected\n");
+}
+
+
+struct razer_nari_ultimate_report razer_nari_matrix_static_effect(struct razer_rgb *rgb)
+{   
+    struct razer_nari_ultimate_report new_report = {0};
+    memset(&new_report, 0, sizeof(struct razer_nari_ultimate_report));
+
+    unsigned char header[] = {0xFF,0x0A,0x00,0xFF,0x04,0x12,0xF1,0x05,0x72};
+    unsigned char footer[] = {
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00,0x00,0x00,0x00,
+        0x00,0x00};
+
+    memcpy(new_report.header, header, 9);
+
+    new_report.rgb_data[0] = rgb->r;
+    new_report.rgb_data[1] = rgb->g;
+    new_report.rgb_data[2] = rgb->b;
+
+    memcpy(new_report.footer, footer, 52);
+
+    return new_report;
 }
 
 /**
