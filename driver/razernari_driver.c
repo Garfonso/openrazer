@@ -252,15 +252,12 @@ static void set_brigthness(struct razer_nari_device *device, unsigned char brigh
  *
  * Set brightness from this file
  */
-static ssize_t razer_attr_write_logo_led_brightness(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+static ssize_t razer_attr_write_matrix_brightness(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
 {
     struct razer_nari_device *device = dev_get_drvdata(dev);
+    unsigned char brightness = (unsigned char)simple_strtoul(buf, NULL, 10);
 
-    if (count != 1) {
-        printk(KERN_WARNING "razernari: brigthness only accepts 1 byte brigthness value\n");
-        return -EINVAL;
-    }
-    set_brigthness(device, buf[0]);
+    set_brigthness(device, brightness);
     
     return count;
 }
@@ -337,7 +334,7 @@ static ssize_t razer_attr_read_matrix_effect_static(struct device *dev, struct d
     return 3;
 }
 
-static ssize_t razer_attr_read_logo_led_brightness(struct device *dev, struct device_attribute *attr, char *buf)
+static ssize_t razer_attr_read_matrix_brightness(struct device *dev, struct device_attribute *attr, char *buf)
 {
     struct razer_nari_device *device = dev_get_drvdata(dev);
     return sprintf(buf, "%d\n", device->brigthness);
@@ -370,7 +367,7 @@ static DEVICE_ATTR(device_serial,           0440, razer_attr_read_device_serial,
 //static DEVICE_ATTR(firmware_version,        0440, razer_attr_read_firmware_version,           NULL);
 static DEVICE_ATTR(request_report,          0220, NULL,                                       razer_attr_write_request_report);
 
-static DEVICE_ATTR(logo_led_brightness,     0660, razer_attr_read_logo_led_brightness,        razer_attr_write_logo_led_brightness);
+static DEVICE_ATTR(matrix_brightness,       0660, razer_attr_read_matrix_brightness,          razer_attr_write_matrix_brightness);
 static DEVICE_ATTR(matrix_effect_none,      0220, NULL,                                       razer_attr_write_matrix_effect_none);
 static DEVICE_ATTR(matrix_effect_static,    0660, razer_attr_read_matrix_effect_static,       razer_attr_write_matrix_effect_static);
 
@@ -427,7 +424,7 @@ static int razer_nari_probe(struct hid_device *hdev, const struct hid_device_id 
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_report);                        // Request report from device
-        CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_logo_led_brightness);                   // Set brightness of logo led
+        CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
     }
@@ -471,7 +468,7 @@ static void razer_nari_disconnect(struct hid_device *hdev)
         device_remove_file(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         device_remove_file(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         device_remove_file(&hdev->dev, &dev_attr_request_report);                        // Request report from device
-        device_remove_file(&hdev->dev, &dev_attr_logo_led_brightness);                   // Set brightness of logo led
+        device_remove_file(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
     }

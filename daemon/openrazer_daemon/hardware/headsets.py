@@ -187,7 +187,7 @@ class RazerNariUltimate(__RazerDevice):
     USB_VID = 0x1532
     USB_PID = 0x051A
     METHODS = ['get_device_type_headset',
-               'set_static_effect', 'set_none_effect']
+               'set_static_effect', 'set_none_effect', 'set_brightness', 'get_brightness']
 
     DEVICE_IMAGE = "https://www.xtremehardware.com/images/stories/Razer/news/Nari_Ultimate-1.png"
 
