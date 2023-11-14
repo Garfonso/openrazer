@@ -216,6 +216,10 @@ The devices below are fully feature supported by OpenRazer, which means all avai
 | Razer Kraken 7.1 V2                           |  1532:0510  |
 | Razer Kraken Ultimate                         |  1532:0527  |
 | Razer Kraken Kitty Edition                    |  1532:0F19  |
+| Razer Nari Ultimate                           |  1532:051A  |
+| Razer Nari Ultimate (connected to USB)        |  1532:051B  |
+| Razer Nari                                    |  1532:051C  |
+| Razer Nari (connected to USB)                 |  1532:051D  |
 
 ### Misc
 | Device                                        | USB VID:PID |
