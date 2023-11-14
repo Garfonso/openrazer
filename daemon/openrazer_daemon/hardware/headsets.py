@@ -177,3 +177,27 @@ class RazerKrakenKittyEdition(__RazerDeviceBrightnessSuspend):
     MATRIX_DIMS = [1, 4]
 
     DEVICE_IMAGE = "https://assets2.razerzone.com/images/pnx.assets/1c503aa176bc82d999299aba0d6c7d2c/kraken-kitty-quartz.png"
+
+class RazerNariUltimate(__RazerDevice):
+    """
+    Class for the Razer Nari Ultimate
+    """
+    EVENT_FILE_REGEX = re.compile(r'.*Razer_Razer_Nari_Ultimate-event-if05')
+
+    USB_VID = 0x1532
+    USB_PID = 0x051A
+    METHODS = ['get_device_type_headset',
+               'set_static_effect', 'set_none_effect']
+
+    DEVICE_IMAGE = "https://www.xtremehardware.com/images/stories/Razer/news/Nari_Ultimate-1.png"
+
+    def _suspend_device(self):
+        self.suspend_args.clear()
+        self.suspend_args['effect'] = self.zone["backlight"]["effect"]
+
+        _dbus_chroma.set_none_effect(self)
+
+    def _resume_device(self):
+        effect = self.suspend_args.get('effect', '')
+        if effect == 'static':  # Static on classic is only 1 colour
+            _dbus_chroma.set_static_effect(self, 0x00, 0x00, 0x00)
