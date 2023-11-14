@@ -24,6 +24,11 @@ ATTRS{idProduct}=="0068|007e|0215|0517|0518|0c00|0c01|0c02|0c04|0f07|0f08|0f09|0
     ATTRS{idVendor}=="1532", \
     ENV{ID_RAZER_CHROMA}="1", ENV{RAZER_DRIVER}="razeraccessory"
 
+# Nari
+ATTRS{idProduct}=="051A|051B|051C|051D", \
+    ATTRS{idVendor}=="1532", \
+    ENV{ID_RAZER_CHROMA}="1", ENV{RAZER_DRIVER}="razernari"
+
 # Get out if no match
 ENV{ID_RAZER_CHROMA}!="1", GOTO="razer_end"
 
