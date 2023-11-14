@@ -25,12 +25,14 @@ struct razer_nari_device {
     unsigned char usb_interface_protocol;
     unsigned short usb_pid;
     unsigned short usb_vid;
+    unsigned char* name;
 
     //TODO: find out how to extract color from reports.
     //store color in device. Not sure if device reports it? But probably does...
     unsigned short red;
     unsigned short green;
     unsigned short blue;
+    unsigned short brigthness;
 
     //don't know yet what  is in the reports.. keep looking.
     u8 data[64];

@@ -232,6 +232,40 @@ static ssize_t razer_attr_read_test(struct device *dev, struct device_attribute 
 }
 
 /**
+ * @brief Set the brigthness on device
+ * 
+ * @param device 
+ * @param brightness 
+ */
+static void set_brigthness(struct razer_nari_device *device, unsigned char brightness) {
+    device->brigthness = brightness;
+    struct razer_nari_request_report report = get_nari_brightness_request_report(device->brigthness);
+
+    // Lock access to sending USB as adhering to the razer len*15ms delay
+    mutex_lock(&device->lock);
+    razer_nari_send_control_msg(device->usb_dev, &report, device->brigthness);
+    mutex_unlock(&device->lock);
+}
+
+/**
+ * Write device file "brightness"
+ *
+ * Set brightness from this file
+ */
+static ssize_t razer_attr_write_logo_led_brightness(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+{
+    struct razer_nari_device *device = dev_get_drvdata(dev);
+
+    if (count != 1) {
+        printk(KERN_WARNING "razernari: brigthness only accepts 1 byte brigthness value\n");
+        return -EINVAL;
+    }
+    set_brigthness(device, buf[0]);
+    
+    return count;
+}
+
+/**
  * Write device file "mode_none"
  *
  * None effect mode is activated whenever the file is written to
@@ -239,12 +273,7 @@ static ssize_t razer_attr_read_test(struct device *dev, struct device_attribute 
 static ssize_t razer_attr_write_matrix_effect_none(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
 {
     struct razer_nari_device *device = dev_get_drvdata(dev);
-    struct razer_nari_request_report report = get_nari_brightness_request_report(0);
-
-    // Lock access to sending USB as adhering to the razer len*15ms delay
-    mutex_lock(&device->lock);
-    razer_nari_send_control_msg(device->usb_dev, &report, 0);
-    mutex_unlock(&device->lock);
+    set_brigthness(device, 0); //none always means 0 brightness.
 
     return count;
 }
@@ -308,6 +337,23 @@ static ssize_t razer_attr_read_matrix_effect_static(struct device *dev, struct d
     return 3;
 }
 
+static ssize_t razer_attr_read_logo_led_brightness(struct device *dev, struct device_attribute *attr, char *buf)
+{
+    struct razer_nari_device *device = dev_get_drvdata(dev);
+    return sprintf(buf, "%d\n", device->brigthness);
+}
+
+/**
+ * Read device file "serial"
+ *
+ * Returns a string
+ */
+static ssize_t razer_attr_read_device_serial(struct device *dev, struct device_attribute *attr, char *buf)
+{
+    struct razer_nari_device *device = dev_get_drvdata(dev);
+    return sprintf(buf, "%s\n", device->name); //we can not jet read the serial from reports... so just return the name for now.
+}
+
 /**
  * Set up the device driver files
 
@@ -320,10 +366,11 @@ static ssize_t razer_attr_read_matrix_effect_static(struct device *dev, struct d
 static DEVICE_ATTR(test,                    0660, razer_attr_read_test,                       razer_attr_write_test);
 static DEVICE_ATTR(version,                 0440, razer_attr_read_version,                    NULL);
 static DEVICE_ATTR(device_type,             0440, razer_attr_read_device_type,                NULL);
-//static DEVICE_ATTR(device_serial,           0440, razer_attr_read_device_serial,              NULL);
+static DEVICE_ATTR(device_serial,           0440, razer_attr_read_device_serial,              NULL);
 //static DEVICE_ATTR(firmware_version,        0440, razer_attr_read_firmware_version,           NULL);
 static DEVICE_ATTR(request_report,          0220, NULL,                                       razer_attr_write_request_report);
 
+static DEVICE_ATTR(logo_led_brightness,     0660, razer_attr_read_logo_led_brightness,        razer_attr_write_logo_led_brightness);
 static DEVICE_ATTR(matrix_effect_none,      0220, NULL,                                       razer_attr_write_matrix_effect_none);
 static DEVICE_ATTR(matrix_effect_static,    0660, razer_attr_read_matrix_effect_static,       razer_attr_write_matrix_effect_static);
 
@@ -340,13 +387,19 @@ static void razer_nari_init(struct razer_nari_device *dev, struct usb_interface 
     dev->usb_pid = usb_dev->descriptor.idProduct;
     dev->hid_dev = hdev;
 
-    /*switch(dev->usb_pid) { //custom setup. Not needed until now.
+    switch(dev->usb_pid) { //custom setup. Not needed until now.
     case USB_DEVICE_ID_RAZER_NARI_ULTIMATE_WIRELESS:
     case USB_DEVICE_ID_RAZER_NARI_ULTIMATE_USB:
+        dev->name = "Razer Nari Ultimate";
+        break;
     case USB_DEVICE_ID_RAZER_NARI_USB:
     case USB_DEVICE_ID_RAZER_NARI_WIRELESS:
+        dev->name = "Razer Nari";
         break;
-    }*/
+    default:
+        dev->name = "Unknown Device";
+        break;
+    }
 }
 
 /**
@@ -372,7 +425,9 @@ static int razer_nari_probe(struct hid_device *hdev, const struct hid_device_id 
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_version);                               // Get driver version
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_test);                                  // Test mode
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
+        CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_report);                        // Request report from device
+        CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_logo_led_brightness);                   // Set brightness of logo led
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
     }
@@ -414,7 +469,9 @@ static void razer_nari_disconnect(struct hid_device *hdev)
         device_remove_file(&hdev->dev, &dev_attr_version);                               // Get driver version
         device_remove_file(&hdev->dev, &dev_attr_test);                                  // Test mode
         device_remove_file(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
+        device_remove_file(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         device_remove_file(&hdev->dev, &dev_attr_request_report);                        // Request report from device
+        device_remove_file(&hdev->dev, &dev_attr_logo_led_brightness);                   // Set brightness of logo led
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
     }
