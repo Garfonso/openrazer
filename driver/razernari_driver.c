@@ -52,7 +52,7 @@ static int razer_nari_send_request_report_msg(struct hid_device *hdev)
     unsigned char* report;
     report = kzalloc(RAZER_NARI_REPORT_LEN, GFP_KERNEL);
 
-    ret = hid_hw_raw_request(hdev, 0x01, report, RAZER_NARI_REPORT_LEN, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+    ret = hid_hw_raw_request(hdev, 0xFF, report, RAZER_NARI_REPORT_LEN, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
     if (ret != RAZER_NARI_REPORT_LEN) {
         pr_err("Failed to send GET_REPORT request: %d\n", ret);
         return ret;
