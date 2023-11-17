@@ -129,6 +129,9 @@ static struct razer_nari_request_report get_nari_request_report(void)
     report.arguments[3] = 0xFF; //this is ff for most request, fd for some, like setting sleep time.
     report.arguments[4] = 0x04; //seems fixed, too.
 
+    report.arguments[5] = 0x12;
+    report.arguments[6] = 0xF1;
+
     return report;
 }
 
@@ -140,8 +143,6 @@ static struct razer_nari_request_report get_nari_brightness_request_report(unsig
     struct razer_nari_request_report report = get_nari_request_report();
 
     //set some fixed header. Always this for brightness settings:
-    report.arguments[5] = 0x12; 
-    report.arguments[6] = 0xF1;
     report.arguments[7] = 0x03;
     report.arguments[8] = 0x71;
 
@@ -159,8 +160,6 @@ static struct razer_nari_request_report get_nari_color_request_report(unsigned s
     struct razer_nari_request_report report = get_nari_request_report();
 
     //set some fixed header. Always this for color settings:
-    report.arguments[5] = 0x12; 
-    report.arguments[6] = 0xF1;
     report.arguments[7] = 0x05;
     report.arguments[8] = 0x72;
 
