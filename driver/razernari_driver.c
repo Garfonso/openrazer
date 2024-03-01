@@ -351,6 +351,28 @@ static ssize_t razer_attr_read_device_serial(struct device *dev, struct device_a
 }
 
 /**
+ * Write device file "request_battery_report"
+ *
+ * Requests updated status from device. Will update charging status and battery level. //TODO!!
+ */
+static ssize_t razer_attr_write_request_battery_report(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+{
+    struct razer_nari_device *device = dev_get_drvdata(dev);
+    mutex_lock(&device->lock);
+    struct razer_nari_request_report report = get_nari_request_report();
+    report.arguments[3] = 0xFD; //this is the battery report request.
+    report.arguments[4] = 0x04; //second try. Without that, it just repeated the request.
+    report.arguments[7] = 0x02;
+    report.arguments[8] = 0x05;
+    razer_nari_send_control_msg(device->usb_dev, &report, 0);
+
+    razer_nari_send_request_report_msg(device->hid_dev);
+    mutex_unlock(&device->lock);
+
+    return count;
+};
+
+/**
  * Set up the device driver files
 
  *
@@ -365,6 +387,7 @@ static DEVICE_ATTR(device_type,             0440, razer_attr_read_device_type,  
 static DEVICE_ATTR(device_serial,           0440, razer_attr_read_device_serial,              NULL);
 //static DEVICE_ATTR(firmware_version,        0440, razer_attr_read_firmware_version,           NULL);
 static DEVICE_ATTR(request_report,          0220, NULL,                                       razer_attr_write_request_report);
+static DEVICE_ATTR(request_battery_report,  0220, NULL,                                       razer_attr_write_request_battery_report);
 
 static DEVICE_ATTR(matrix_brightness,       0660, razer_attr_read_matrix_brightness,          razer_attr_write_matrix_brightness);
 static DEVICE_ATTR(matrix_effect_none,      0220, NULL,                                       razer_attr_write_matrix_effect_none);
@@ -423,6 +446,7 @@ static int razer_nari_probe(struct hid_device *hdev, const struct hid_device_id 
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_report);                        // Request report from device
+        CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_battery_report);                // Request battery report from device
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
@@ -467,6 +491,7 @@ static void razer_nari_disconnect(struct hid_device *hdev)
         device_remove_file(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         device_remove_file(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
         device_remove_file(&hdev->dev, &dev_attr_request_report);                        // Request report from device
+        device_remove_file(&hdev->dev, &dev_attr_request_battery_report);                // Request battery report from device
         device_remove_file(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
