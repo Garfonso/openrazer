@@ -13,6 +13,8 @@
 //is this correct? -> derived from https://github.com/openrazer/openrazer/issues/724
 #define USB_DEVICE_ID_RAZER_NARI_WIRELESS 0x051C
 #define USB_DEVICE_ID_RAZER_NARI_USB 0x051D
+// there might be another one for the xbox version. But I don't know the id.
+// this might also work for the manowar. Are there still people out there that have the hardware and want to test it?
 
 #define USB_INTERFACE_PROTOCOL_NONE 0
 
@@ -27,8 +29,7 @@ struct razer_nari_device {
     unsigned short usb_vid;
     unsigned char* name;
 
-    //TODO: find out how to extract color from reports.
-    //store color in device. Not sure if device reports it? But probably does...
+    //store color in device. -> hardware does not report set color. At least Synapse can't get it either.
     unsigned short red;
     unsigned short green;
     unsigned short blue;
@@ -39,9 +40,11 @@ struct razer_nari_device {
 };
 
 /*
- * document stuff here...
+ * TBH I don't really have a clue how to use the reports.
+ * Somewhere in there seems to be the battery information. But I can't decipher it.
+ * Maybe there is more in there, but not too much. Synapse can not tell a lot
+ * about the device either. For example the don't know the set color or brightness.
  * */
-
 struct razer_nari_request_report {
     unsigned char arguments[64];
     unsigned char length;
