@@ -24,6 +24,8 @@ MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_VERSION(DRIVER_VERSION);
 MODULE_LICENSE(DRIVER_LICENSE);
 
+#define NARI_DEBUG_REPORTS 0
+
 /**
  * Print report to syslog
  */
@@ -275,21 +277,6 @@ static ssize_t razer_attr_write_matrix_effect_none(struct device *dev, struct de
 }
 
 /**
- * @brief Write device file "request_report"
- * 
- * Requests updated status from device. Will update charging status and battery level. //TODO!!
- */
-static ssize_t razer_attr_write_request_report(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
-{
-    struct razer_nari_device *device = dev_get_drvdata(dev);
-    mutex_lock(&device->lock);
-    razer_nari_send_request_report_msg(device->hid_dev);
-    mutex_unlock(&device->lock);
-
-    return count;
-};
-
-/**
  * Write device file "mode_static"
  *
  * Static effect mode is activated whenever the file is written to with 3 bytes
@@ -350,6 +337,24 @@ static ssize_t razer_attr_read_device_serial(struct device *dev, struct device_a
     return sprintf(buf, "%s\n", device->name); //we can not jet read the serial from reports... so just return the name for now.
 }
 
+
+#if NARI_DEBUG_REPORTS
+/**
+ * @brief Write device file "request_report"
+ * 
+ * Requests updated status from device. Will update charging status and battery level. //TODO!!
+ */
+static ssize_t razer_attr_write_request_report(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+{
+    struct razer_nari_device *device = dev_get_drvdata(dev);
+    mutex_lock(&device->lock);
+    razer_nari_send_request_report_msg(device->hid_dev);
+    mutex_unlock(&device->lock);
+
+    return count;
+};
+
+
 /**
  * Write device file "request_battery_report"
  *
@@ -371,6 +376,7 @@ static ssize_t razer_attr_write_request_battery_report(struct device *dev, struc
 
     return count;
 };
+#endif
 
 /**
  * Set up the device driver files
@@ -385,9 +391,11 @@ static DEVICE_ATTR(test,                    0660, razer_attr_read_test,         
 static DEVICE_ATTR(version,                 0440, razer_attr_read_version,                    NULL);
 static DEVICE_ATTR(device_type,             0440, razer_attr_read_device_type,                NULL);
 static DEVICE_ATTR(device_serial,           0440, razer_attr_read_device_serial,              NULL);
+#if NARI_DEBUG_REPORTS
 //static DEVICE_ATTR(firmware_version,        0440, razer_attr_read_firmware_version,           NULL);
 static DEVICE_ATTR(request_report,          0220, NULL,                                       razer_attr_write_request_report);
 static DEVICE_ATTR(request_battery_report,  0220, NULL,                                       razer_attr_write_request_battery_report);
+#endif
 
 static DEVICE_ATTR(matrix_brightness,       0660, razer_attr_read_matrix_brightness,          razer_attr_write_matrix_brightness);
 static DEVICE_ATTR(matrix_effect_none,      0220, NULL,                                       razer_attr_write_matrix_effect_none);
@@ -445,8 +453,10 @@ static int razer_nari_probe(struct hid_device *hdev, const struct hid_device_id 
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_test);                                  // Test mode
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
+#if NARI_DEBUG_REPORTS
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_report);                        // Request report from device
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_request_battery_report);                // Request battery report from device
+#endif
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         CREATE_DEVICE_FILE(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
@@ -490,8 +500,10 @@ static void razer_nari_disconnect(struct hid_device *hdev)
         device_remove_file(&hdev->dev, &dev_attr_test);                                  // Test mode
         device_remove_file(&hdev->dev, &dev_attr_device_type);                           // Get string of device type
         device_remove_file(&hdev->dev, &dev_attr_device_serial);                         // Get serial of device
+#if NARI_DEBUG_REPORTS
         device_remove_file(&hdev->dev, &dev_attr_request_report);                        // Request report from device
         device_remove_file(&hdev->dev, &dev_attr_request_battery_report);                // Request battery report from device
+#endif
         device_remove_file(&hdev->dev, &dev_attr_matrix_brightness);                     // Set brightness of logo led
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_none);                    // No effect
         device_remove_file(&hdev->dev, &dev_attr_matrix_effect_static);                  // Static effect
